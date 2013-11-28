@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides: Rational Team Concert Build System
 # Required-Start: $network
@@ -7,19 +7,23 @@
 # Short-Description:
 # Description:
 ### END INIT INFO
+
 timestamp=`date '+%Y%M%d-%H%m%S'`
-
-REPO_URL="https://sma-unleash.ratl.swg.usma.ibm.com:9445/rtc"
-USERID="swilbur@us.ibm.com"
-ENGINE_ID="sma-unleashvm01_engine0"
-PASS_FILENAME="swilbur.rtcpass"
+REPO_URL="https://clm404.demo/ccm"
+USERID="sgwilbur"
+ENGINE_ID="jke.dev.engine"
+PASS_FILENAME="sgwilbur.jbe"
 WORK_DIR=/var/ibm/jbe
-JBE_INSTALL_LOCATION=/opt/IBM/CLM401/TeamConcertBuild/
+JBE_INSTALL_LOCATION=/opt/IBM/BuildSystem
 
-JAVA_HOME=${JBE_INSTALL_LOCATION}/jdk
-JBE_EXEC=${JBE_INSTALL_LOCATION}/bin/jbe
+# JAVA_HOME=${JBE_INSTALL_LOCATION}/jdk
+JAVA_HOME=/opt/IBM/jre_6.0.0.sr9_20110208_03/jre
+JBE_EXEC=${JBE_INSTALL_LOCATION}/buildsystem/buildengine/eclipse/jbe
 LOGFILE=${WORK_DIR}/logs/jbe-${ENGINE_ID}.out
 PASSFILE=${WORK_DIR}/${PASS_FILENAME}
+
+PATH=${JAVA_HOME}/bin:${PATH}
+
 
 case "$1" in
 'start')
