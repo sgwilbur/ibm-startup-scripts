@@ -1,0 +1,66 @@
+#!/bin/bash
+##
+# chkconfig: 35 90 12
+# description: Control the JazzTeamServer 
+#
+##
+
+# Get function from functions library
+. /etc/init.d/functions
+
+# defaults
+SERVICE_NAME=jazzteamserver
+JTS_PATH=/opt/IBM/JazzTeamServer
+
+
+# Start the service RTC
+start()
+{
+  Xvfb :1 -screen 0 800x600x24 &
+  DISPLAY=localhost:1.0 ${JTS_PATH}/server/server.startup &
+  
+  ### Create the lock file ###
+  touch /var/lock/subsys/${SERVICE_NAME}
+  success $"${SERVICE_NAME} server startup"
+  echo
+}
+
+# Restart the service RTC
+stop()
+{
+  ${JTS_PATH}/server/server.shutdown &
+  pid=$(/sbin/pidof Xvfb )
+  kill $pid
+
+  ### Now, delete the lock file ###
+  rm -f /var/lock/subsys/${SERVICE_NAME}
+  echo
+}
+
+status()
+{
+  echo "To be implemented...."
+}
+
+### main logic ###
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status
+        ;;
+  restart|reload|condrestart)
+        stop
+        sleep 15s # add a small delay
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+esac
+
+exit 0
